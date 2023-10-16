@@ -1,7 +1,11 @@
+mod lexer;
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn lex_string() {
-        assert_eq!(0, 0);
+        lex()
     }
 }

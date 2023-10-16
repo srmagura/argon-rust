@@ -3,21 +3,23 @@ enum Token {
 }
 
 fn lex_string(input: &String, i: i32) {
-    let j = i;
+    let mut chars = input.chars();
+    let mut j = i;
 
-    if input[j] != '"' {
-        return;
-    }
+    let q = match chars.next() {
+        None => 0,
+        ['"'] => 1,
+    };
 
-    j += 1;
+    // j += 1;
 
-    for c in input.chars() {
-        if (c == '"') {
-            println!("Got end quote");
-        }
-    }
+    // for c in input.chars() {
+    //     if (c == '"') {
+    //         println!("Got end quote");
+    //     }
+    // }
 
-    return;
+    // return;
 }
 
 fn lex(input: &String) {
