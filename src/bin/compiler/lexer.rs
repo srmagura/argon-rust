@@ -1,18 +1,31 @@
-enum Token<'a> {
-    String(&'a str),
+pub enum TokenType {
+    String,
 }
 
-fn lex_string<'a>(input: &'a str) -> Option<Token<'a>> {
+pub struct Token {
+    pub token_type: TokenType,
+    pub value: String,
+}
+
+fn lex_string(input: &str) -> Option<Token> {
     let mut chars = input.chars();
+    let mut len = 0;
 
     match chars.next() {
         None => return None,
         Some(_c) => (),
     };
 
+    len += 1;
+
     for c in chars {
+        len += 1;
+
         if c == '"' {
-            return Some(Token::String(&input[0..1]));
+            return Some(Token {
+                token_type: TokenType::String,
+                value: String::from(&input[0..len]),
+            });
         }
     }
 
@@ -20,6 +33,32 @@ fn lex_string<'a>(input: &'a str) -> Option<Token<'a>> {
     return None;
 }
 
-pub fn lex(input: &str) {
-    lex_string(input);
+pub fn lex(input: &str) -> Option<Vec<Token>> {
+    let mut tokens: Vec<Token> = Vec::new();
+    let mut i = 0;
+
+    let chars: Vec<char> = input.chars().collect();
+
+    while i < input.len() {
+        let next_char = chars[i];
+
+        if next_char == ' ' || next_char == '\t' {
+            i += 1;
+            continue;
+        }
+
+        match lex_string(&input[i..]) {
+            None => (),
+            Some(token) => {
+                i += token.value.len();
+                tokens.push(token);
+            }
+        }
+    }
+
+    if i == input.len() {
+        return Some(tokens);
+    }
+
+    return None;
 }
