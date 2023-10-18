@@ -1,27 +1,25 @@
-enum Token {
-    String(String),
+enum Token<'a> {
+    String(&'a str),
 }
 
-fn lex_string(input: &String, i: i32) {
+fn lex_string<'a>(input: &'a str) -> Option<Token<'a>> {
     let mut chars = input.chars();
-    let mut j = i;
 
-    let q = match chars.next() {
-        None => 0,
-        ['"'] => 1,
+    match chars.next() {
+        None => return None,
+        Some(_c) => (),
     };
 
-    // j += 1;
+    for c in chars {
+        if c == '"' {
+            return Some(Token::String(&input[0..1]));
+        }
+    }
 
-    // for c in input.chars() {
-    //     if (c == '"') {
-    //         println!("Got end quote");
-    //     }
-    // }
-
-    // return;
+    // We got to the end without finding a closing quote
+    return None;
 }
 
-fn lex(input: &String) {
+pub fn lex(input: &str) {
     lex_string(input);
 }
